@@ -29,17 +29,20 @@
 */
 
 
-/*
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
+	// running my entire app fro here (for now)
     [super viewDidLoad];
+	controlView = [[fOSC2DView alloc] initWithFrame:self.view.bounds];
+	[self.view addSubview:controlView];
 }
-*/
+	
 
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return YES;
+    return NO;
 }
 
 - (void)didReceiveMemoryWarning {

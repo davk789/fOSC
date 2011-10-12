@@ -1,5 +1,5 @@
 //
-//  fOSCViewController.h
+//  fOSC2DView.h
 //  fOSC
 //
 //  Created by David Kendall on 10/9/11.
@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "fOSC2DView.h"
 
+#define NUMPOINTS 5
 
-@interface fOSCViewController : UIViewController {
-    fOSC2DView *controlView;
+@interface fOSC2DView : UIView {
+	NSMutableArray *points;
 }
 
-@end
 
+@end
