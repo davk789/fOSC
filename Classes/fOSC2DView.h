@@ -7,12 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "fOSCDispatcher.h"
 
-#define NUMPOINTS 5
+#include <math.h>
+#include <stdlib.h>
 
 @interface fOSC2DView : UIView {
 	NSMutableArray *points;
+    fOSCDispatcher *dispatcher;
+    
 }
+
+@property (retain) fOSCDispatcher *dispatcher;
 
 
 @end

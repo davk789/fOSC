@@ -34,11 +34,15 @@
 - (void)viewDidLoad {
 	// running my entire app fro here (for now)
     [super viewDidLoad];
+    
 	controlView = [[fOSC2DView alloc] initWithFrame:self.view.bounds];
+
+    oscDispatcher = [[fOSCDispatcher alloc] init]; // I guess I'm supposed to call alloc too?
+    
+    [controlView setDispatcher:oscDispatcher];
+    
 	[self.view addSubview:controlView];
 }
-	
-
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
