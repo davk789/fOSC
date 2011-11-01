@@ -8,7 +8,7 @@
 
 #import "fOSCDispatcher.h"
 
-@implementation fOSCDispatcher
+@implementation fOSCMessenger
 
 - (id)init
 {
@@ -16,48 +16,12 @@
     if (self) {
         // initialize variables
         socket = [[AsyncUdpSocket alloc] init];
-        port = [[NSNumber numberWithInt:57199] retain];
-        ip = @"192.168.1.101"; // pointing at the mac right now
-        bufferSize = 6000;
+        port = [[NSNumber numberWithInt:57200] retain];
+        ip = @"192.168.1.103";
     }
     
     return self;
 }
-
-- (void)beginAction:(NSArray *)points {
-    for (NSValue *nsPoint in points) {
-        CGPoint cgPoint = [nsPoint CGPointValue];
-		float x = (float)cgPoint.x;
-		float y = (float)cgPoint.y;
-        [self sendMsg: @"/fOSC/on", [NSNumber numberWithFloat:x], [NSNumber numberWithFloat:y], nil];
-//        NSData *bundle = [NSData dataWithBytes:<#(const void *)#> length:<#(NSUInteger)#>];
-    }
-    NSLog(@"\nBegin:\n%@", points);
-}
-
-- (void)moveAction:(NSArray *)points {
-    for (NSValue *nsPoint in points) {
-        CGPoint cgPoint = [nsPoint CGPointValue];
-		float x = (float)cgPoint.x;
-		float y = (float)cgPoint.y;
-        [self sendMsg: @"/fOSC/move", [NSNumber numberWithFloat:x], [NSNumber numberWithFloat:y], nil];
-        //        NSData *bundle = [NSData dataWithBytes:<#(const void *)#> length:<#(NSUInteger)#>];
-    }
-}
-
-- (void)endAction:(NSArray *)points {
-    for (NSValue *nsPoint in points) {
-        CGPoint cgPoint = [nsPoint CGPointValue];
-		float x = (float)cgPoint.x;
-		float y = (float)cgPoint.y;
-        NSLog(@"%f %f", x, y);
-        [self sendMsg: @"/fOSC/off", [NSNumber numberWithFloat:x], [NSNumber numberWithFloat:y], nil];
-
-        //        NSData *bundle = [NSData dataWithBytes:<#(const void *)#> length:<#(NSUInteger)#>];
-    }
-}
-
-// interface section -- maybe separate this out to its own class
 
 - (id)sendMsg:(id)first, ... {
     // collect the arguments in msg
@@ -66,66 +30,43 @@
     NSMutableArray *msg = [[NSMutableArray alloc] init];
     id obj;
     for (obj = first; obj != nil; obj = va_arg(args, id)) {
-
+        
         [msg addObject:obj];
     }
-    
-//    // prepare the osc message buf
-//    OSCbuf myBuf;
-//    OSCbuf *buf = &myBuf;
-//    char bytes[bufferSize];
-//    OSC_initBuffer(buf, bufferSize, bytes); // sizeof string
-//    
-//    OSCTimeTag tt = OSCTT_CurrentTime();
-//    OSC_openBundle(buf, tt);
-//    
-//    // write data to OSC buf
-//    char *msgAddress = [[msg objectAtIndex:0] UTF8String];
-//    int valx = [[msg objectAtIndex:1] intValue];
-//    int valy = [[msg objectAtIndex:2] intValue];
-//    
-//    OSC_writeAddressAndTypes(buf, msgAddress, ",ii");
-//
-//    OSC_writeIntArg(buf, valx);
-//    OSC_writeIntArg(buf, valy);
-//    
-//    const char *data = OSC_getPacket(buf);
-//    NSData *outData = [NSData dataWithBytes:data length:32]; // why does 32 work?
-    
-    // instead of using osc lib, just use NSMutableData
-    
-    NSData *outData = [self getFOSCDataWithAddress:[msg objectAtIndex:0] 
-                                                 x:(NSNumber *)[msg objectAtIndex:1]
-                                                 y:(NSNumber *)[msg objectAtIndex:2]];
-
-    //send the data from the osc buf
+    // use the msg to get the properly formatted binary data to send
+    NSData *outData = [self fOSCDataWithAddress:[msg objectAtIndex:0] 
+                                     identifier:(NSNumber *)[msg objectAtIndex:1]
+                                              x:(NSNumber *)[msg objectAtIndex:2]
+                                              y:(NSNumber *)[msg objectAtIndex:3]];
+    // ... and then send
     [socket sendData:outData toHost:ip port:[port intValue] withTimeout:-1 tag:1];
-
-//    OSC_closeBundle(buf);    
-
+    
     return self;
 }
 
-- (NSData *)getFOSCDataWithAddress:(NSString *)addr x:(NSNumber *)x y:(NSNumber *)y {
+- (NSData *)fOSCDataWithAddress:(NSString *)addr identifier:(NSNumber *)i x:(NSNumber *)x y:(NSNumber *)y {
     // specifically, just make the osc data for this fOSC version. worry about reusability later
     NSMutableData *data = [NSMutableData data];
     
-    NSData *msgAddr = [[self getOSCString:addr] dataUsingEncoding:NSASCIIStringEncoding];
-    NSData *tags = [[self getOSCString:@",ii"] dataUsingEncoding:NSASCIIStringEncoding];
-    SInt32 swapX = [self swapInt:x];
-    SInt32 swapY = [self swapInt:y];
+    NSData *msgAddr = [[self oscString:addr] dataUsingEncoding:NSASCIIStringEncoding];
+    NSData *tags = [[self oscString:@",iff"] dataUsingEncoding:NSASCIIStringEncoding];
+    SInt32 swapI = [self swapInt:i];
+    CFSwappedFloat32 swapX = [self swapFloat:x];
+    CFSwappedFloat32 swapY = [self swapFloat:y];
+    NSData *iArg = [NSData dataWithBytes:&swapI length:4];
     NSData *xArg = [NSData dataWithBytes:&swapX length:4];
     NSData *yArg = [NSData dataWithBytes:&swapY length:4];
     
     [data appendData:msgAddr];
     [data appendData:tags];
+    [data appendData:iArg];
     [data appendData:xArg];
     [data appendData:yArg];
     
     return data;
 }
 
-- (NSString *)getOSCString:(NSString *)str {
+- (NSString *)oscString:(NSString *)str {
     // Copied straight from the Pony Express example
     // string + 1 null in termination + 0-3 nulls in padding for 4-byte alignment
     NSUInteger numberOfNulls = 4 - (str.length & 3);
@@ -141,6 +82,84 @@
     return swappedValue;
 }
 
+- (CFSwappedFloat32)swapFloat:(NSNumber *)inVal {
+    Float32 value = 0;
+    CFNumberGetValue((CFNumberRef)inVal, kCFNumberFloat32Type, &value);
+    CFSwappedFloat32 swappedValue = CFConvertFloat32HostToSwapped(value);
+    return swappedValue;
+}
+
+
 
 
 @end
+
+@implementation fOSCDispatcher
+
+/**
+ do all the logic to manage the osc data.
+ */
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        messenger = [[fOSCMessenger alloc] init];
+        touches = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
+}
+
+- (void)beginAction:(NSDictionary *)points {
+    [self sendMessage:@"/fOSC/start" withPoints:points];
+}
+
+- (void)moveAction:(NSDictionary *)points {
+    [self sendMessage:@"/fOSC/move" withPoints:points];
+}
+
+- (void)endAction:(NSDictionary *)points {
+    [self sendMessage:@"/fOSC/end" withPoints:points];
+}
+
+- (NSNumber *)voiceIDWithX:(float)x y:(float)y {
+    NSLog(@"fuck\n");
+    return [NSNumber numberWithInt:0];
+}
+
+- (void)sendMessage:(NSString *)msg withPoints:(NSDictionary *)points {
+    int i = 0;
+    for (id touchID in points) {
+        CGPoint cgPoint = [[points objectForKey:touchID] CGPointValue];
+        
+		NSNumber *x = [self xValueToUnit:(int)cgPoint.x];
+		NSNumber *y = [self yValueToUnit:(int)cgPoint.y];
+        float fX = [x floatValue]; // DEBUG
+        float fY = [y floatValue]; // DEBUG
+        int indInt = [touchID intValue]; // DEBUG
+        printf("\ni: %i:\tx: %f\ty: %f\t%s", indInt, fX, fY, [msg UTF8String]);
+        
+        [messenger sendMsg:msg, touchID, x, y, nil];
+        i++; 
+    }
+}
+
+- (NSNumber *)xValueToUnit:(int)x {
+    float scale = (float)x / 768.0;
+    NSNumber *unit = [NSNumber numberWithFloat:scale];
+    
+    return unit;
+}
+
+- (NSNumber *)yValueToUnit:(int)y {
+    float scale = (float)y / 1024.0;
+    NSNumber *unit = [NSNumber numberWithFloat:scale];
+    return unit;
+}
+
+
+@end
+
+
+

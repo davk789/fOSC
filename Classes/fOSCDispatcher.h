@@ -14,26 +14,33 @@
 
 #import <Foundation/Foundation.h>
 #import "AsyncUdpSocket.h"
-#import "OSC-client.h" // trying to get rid of this right now
 
-
-// instead of asyncudpsocket, let's try lo
-//#import <lo/lo.h> // or not
-
-@interface fOSCDispatcher : NSObject {
+@interface fOSCMessenger : NSObject {
     AsyncUdpSocket *socket;
     NSString *ip;
     NSNumber *port;
-    int bufferSize;
 }
 
 - (id)sendMsg:(id)first, ...;
-- (NSData *)getFOSCDataWithAddress:(NSString *)addr x:(NSNumber *)x y:(NSNumber *)y;
-- (NSString *)getOSCString:(NSString *)str;
+- (NSData *)fOSCDataWithAddress:(NSString *)addr identifier:(NSNumber *)i x:(NSNumber *)x y:(NSNumber *)y;
+- (NSString *)oscString:(NSString *)str;
 - (SInt32)swapInt:(NSNumber *)inVal;
+- (CFSwappedFloat32)swapFloat:(NSNumber *)inVal;
 
-- (void)beginAction:(NSArray *)points;
-- (void)moveAction:(NSArray *)points;
-- (void)endAction:(NSArray *)points;
+@end
+
+@interface fOSCDispatcher : NSObject {
+    /* the dispatcher should handle program logic stuff as it pertains to the touch inputs */
+    fOSCMessenger *messenger;
+    NSMutableArray *touches;
+}
+
+- (void)beginAction:(NSDictionary *)points;
+- (void)moveAction:(NSDictionary *)points;
+- (void)endAction:(NSDictionary *)points;
+- (void)sendMessage:(NSString *)msg withPoints:(NSDictionary *)point;
+
+-(NSNumber *)xValueToUnit:(int)x;
+-(NSNumber *)yValueToUnit:(int)y;
 
 @end

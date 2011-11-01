@@ -13,12 +13,14 @@
 #include <stdlib.h>
 
 @interface fOSC2DView : UIView {
-	NSMutableArray *points;
+	NSMutableDictionary *points;
     fOSCDispatcher *dispatcher;
-    
 }
+
++ (NSNumber *)newTouchID;
 
 @property (retain) fOSCDispatcher *dispatcher;
 
+- (NSNumber *)touchIDWithX:(int)x y:(int)y;
 
 @end

@@ -37,17 +37,18 @@
     
 	controlView = [[fOSC2DView alloc] initWithFrame:self.view.bounds];
 
-    oscDispatcher = [[fOSCDispatcher alloc] init]; // I guess I'm supposed to call alloc too?
+    oscDispatcher = [[fOSCDispatcher alloc] init];
     
     [controlView setDispatcher:oscDispatcher];
     
 	[self.view addSubview:controlView];
 }
 
-// Override to allow orientations other than the default portrait orientation.
+/*// Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return NO;
-}
+    // the view does not resize when switching orientations. I will fix this later. leave the defaults for now.
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
+}*/
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
