@@ -35,15 +35,8 @@ static UInt32 touchIDCount = 0;
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	for (UITouch *touch in touches) {
 		CGPoint location = [touch locationInView:self]; 
-		NSValue *nsLocation = [NSValue valueWithCGPoint:location];
-        
-        NSNumber *voiceID = [self touchIDWithX:location.x y:location.y];
-        
-        if ([voiceID intValue] < 0) {
-            // only add a new point if an old one is not detected. this is a workaround, and will
-            // not fix the core problems like touchEndeds not matching up properly with touchBegin
-            [points setObject:nsLocation forKey:[[self class] newTouchID]];
-        }
+        NSValue *nsLocation = [NSValue valueWithCGPoint:location];
+        [points setObject:nsLocation forKey:[[self class] newTouchID]];
 	}
     [dispatcher beginAction:points];
 	[self setNeedsDisplay];
@@ -56,11 +49,6 @@ static UInt32 touchIDCount = 0;
 
         NSNumber *voiceID = [self touchIDWithX:location.x y:location.y];
         
-        if ([voiceID intValue] < 0) {
-            printf("\nThe fucking point has no neighbor. Ignoring now.");
-            return;
-        }
-
         NSValue *point = [points objectForKey:voiceID];
         [removed setObject:point forKey:voiceID];
         
@@ -81,11 +69,6 @@ static UInt32 touchIDCount = 0;
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
         NSNumber *voiceID = [self touchIDWithX:location.x y:location.y];
         
-        if ([voiceID intValue] < 0) {
-            printf("\nThe fucking point has no neighbor. Ignoring now.");
-            return;
-        }
-
         [points setObject:nsLocation forKey:voiceID];
         ++i;
     }
