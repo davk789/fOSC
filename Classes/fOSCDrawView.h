@@ -1,5 +1,5 @@
 //
-//  fOSC2DView.h
+//  fOSCDrawView.h
 //  fOSC
 //
 //  Created by David Kendall on 10/9/11.
@@ -12,15 +12,11 @@
 #include <math.h>
 #include <stdlib.h>
 
-@interface fOSC2DView : UIView {
+@class fOSCDrawViewController;
+
+@interface fOSCDrawView : UIView {
 	NSMutableDictionary *points;
-    fOSCDispatcher *dispatcher;
 }
 
-+ (NSNumber *)newTouchID;
-
-@property (retain) fOSCDispatcher *dispatcher;
-
-- (NSNumber *)touchIDWithX:(int)x y:(int)y;
-
+@property (retain) NSMutableDictionary *points;
 @end

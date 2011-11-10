@@ -32,16 +32,17 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-	// running my entire app fro here (for now)
+	// running my entire app here (for now)
     [super viewDidLoad];
     
-	controlView = [[fOSC2DView alloc] initWithFrame:self.view.bounds];
+//	drawController = [[fOSCDrawViewController alloc] initWithFrame:self.view.bounds];
+    drawController = [[fOSCDrawViewController alloc] init];
 
     oscDispatcher = [[fOSCDispatcher alloc] init];
     
-    [controlView setDispatcher:oscDispatcher];
+    [drawController setDispatcher:oscDispatcher];
     
-	[self.view addSubview:controlView];
+	[self.view addSubview:[drawController view]];
 }
 
 /*// Override to allow orientations other than the default portrait orientation.
@@ -65,6 +66,8 @@
 
 - (void)dealloc {
     [super dealloc];
+    [drawController release];
+    [oscDispatcher release];
 }
 
 @end

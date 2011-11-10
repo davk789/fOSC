@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "fOSC2DView.h"
+#import "fOSCDrawViewController.h"
 #import "fOSCDispatcher.h"
 
 
 @interface fOSCViewController : UIViewController {
-    fOSC2DView *controlView;
+    fOSCDrawViewController *drawController;
     fOSCDispatcher *oscDispatcher;
 }
 

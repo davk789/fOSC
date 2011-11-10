@@ -15,32 +15,18 @@
 #import <Foundation/Foundation.h>
 #import "AsyncUdpSocket.h"
 
-@interface fOSCMessenger : NSObject {
+@interface fOSCDispatcher : NSObject {
     AsyncUdpSocket *socket;
     NSString *ip;
     NSNumber *port;
 }
 
+@property (retain) NSString *ip;
+@property (retain) NSNumber *port;
+
 - (id)sendMsg:(id)first, ...;
 - (NSData *)fOSCDataWithAddress:(NSString *)addr identifier:(NSNumber *)i x:(NSNumber *)x y:(NSNumber *)y;
-- (NSString *)oscString:(NSString *)str;
-- (SInt32)swapInt:(NSNumber *)inVal;
-- (CFSwappedFloat32)swapFloat:(NSNumber *)inVal;
 
 @end
 
-@interface fOSCDispatcher : NSObject {
-    /* the dispatcher should handle program logic stuff as it pertains to the touch inputs */
-    fOSCMessenger *messenger;
-    NSMutableArray *touches;
-}
 
-- (void)beginAction:(NSDictionary *)points;
-- (void)moveAction:(NSDictionary *)points;
-- (void)endAction:(NSDictionary *)points;
-- (void)sendMessage:(NSString *)msg withPoints:(NSDictionary *)point;
-
--(NSNumber *)xValueToUnit:(int)x;
--(NSNumber *)yValueToUnit:(int)y;
-
-@end
