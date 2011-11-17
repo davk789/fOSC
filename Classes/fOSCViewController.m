@@ -35,21 +35,25 @@
 	// running my entire app here (for now)
     [super viewDidLoad];
     
-//	drawController = [[fOSCDrawViewController alloc] initWithFrame:self.view.bounds];
     drawController = [[fOSCDrawViewController alloc] init];
-
     oscDispatcher = [[fOSCDispatcher alloc] init];
-    
     [drawController setDispatcher:oscDispatcher];
+
     
-	[self.view addSubview:[drawController view]];
+    settingsController = [[fOSCSettingsViewController alloc] init];
+//	[self.view addSubview:[drawController view]];
+    
+    [self.view addSubview:[settingsController view]];
+    
+    
+    
 }
 
-/*// Override to allow orientations other than the default portrait orientation.
+// Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // the view does not resize when switching orientations. I will fix this later. leave the defaults for now.
-    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
-}*/
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -68,6 +72,7 @@
     [super dealloc];
     [drawController release];
     [oscDispatcher release];
+    [settingsController release];
 }
 
 @end

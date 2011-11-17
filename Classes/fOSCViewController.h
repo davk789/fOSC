@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "fOSCDrawViewController.h"
 #import "fOSCDispatcher.h"
-
+#import "fOSCSettingsViewController.h"
 
 @interface fOSCViewController : UIViewController {
     fOSCDrawViewController *drawController;
+    fOSCSettingsViewController *settingsController;
     fOSCDispatcher *oscDispatcher;
 }
 
