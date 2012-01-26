@@ -23,6 +23,7 @@
 @property (retain, nonatomic) fOSCDrawViewController *drawController;
 
 - (IBAction)switchViews:(id)sender;
+- (void)resetView;
 
 @end
 

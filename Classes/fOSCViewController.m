@@ -41,6 +41,13 @@
     
 }
 
+- (void)resetView {
+    if (self.drawController.view.superview == nil) {
+        [settingsController.view removeFromSuperview];
+        [self.view insertSubview:drawController.view atIndex:0];
+    }
+}
+
 - (IBAction)switchViews:(id)sender {
 	[UIView beginAnimations:@"View Flip" context:nil];
 	[UIView setAnimationDuration:1.25];
