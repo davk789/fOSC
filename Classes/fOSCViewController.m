@@ -10,7 +10,8 @@
 
 @implementation fOSCViewController
 
-
+@synthesize settingsButton;
+@synthesize settingsController, drawController;
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -28,30 +29,66 @@
 }
 */
 
-
-
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-	// running my entire app here (for now)
     [super viewDidLoad];
-    
-    drawController = [[fOSCDrawViewController alloc] init];
-    oscDispatcher = [[fOSCDispatcher alloc] init];
-    [drawController setDispatcher:oscDispatcher];
 
+    oscDispatcher = [[fOSCDispatcher alloc] init];
+
+    drawController = [[fOSCDrawViewController alloc] initWithDispatcher:oscDispatcher];
     
-    settingsController = [[fOSCSettingsViewController alloc] init];
-//	[self.view addSubview:[drawController view]];
+	[self.view insertSubview:drawController.view atIndex: 0];
     
-    [self.view addSubview:[settingsController view]];
-    
-    
+}
+
+- (IBAction)switchViews:(id)sender {
+	[UIView beginAnimations:@"View Flip" context:nil];
+	[UIView setAnimationDuration:1.25];
+	[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+
+    if (self.settingsController.view.superview == nil) {
+        if (self.settingsController == nil) {
+            fOSCSettingsViewController *contr = [[fOSCSettingsViewController alloc] initWithNibName:@"fOSCSettingsViewController"                   
+                                                                                             bundle:nil
+                                                                                         dispatcher:oscDispatcher];
+            self.settingsController = contr;
+            [contr release];
+        }
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:self.view cache:YES];
+        
+		[drawController viewWillAppear:YES];
+		[settingsController viewWillDisappear:YES];
+		
+		[drawController.view removeFromSuperview];
+		[self.view insertSubview:settingsController.view atIndex:0];
+        
+		[settingsController viewDidDisappear:YES];
+		[drawController viewDidAppear:YES];
+
+    } else {
+        if (self.drawController == nil) {
+            fOSCDrawViewController *contr = [[fOSCDrawViewController alloc] initWithDispatcher:oscDispatcher];
+            self.drawController = contr;
+            [contr release];
+        }
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:self.view cache:YES];
+        
+		[settingsController viewWillAppear:YES];
+		[drawController viewWillDisappear:YES];
+		
+		[settingsController.view removeFromSuperview];
+		[self.view insertSubview:drawController.view atIndex:0];
+        
+		[drawController viewDidDisappear:YES];
+		[settingsController viewDidAppear:YES];
+    }
+    [UIView commitAnimations];
     
 }
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // the view does not resize when switching orientations. I will fix this later. leave the defaults for now.
+    // my app should support other orientations eventually
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
@@ -70,9 +107,7 @@
 
 - (void)dealloc {
     [super dealloc];
-    [drawController release];
     [oscDispatcher release];
-    [settingsController release];
 }
 
 @end

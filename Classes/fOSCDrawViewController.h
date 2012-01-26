@@ -18,6 +18,7 @@
 
 @property (retain) fOSCDispatcher *dispatcher;
 
+- (id)initWithDispatcher:(fOSCDispatcher *)disp;
 - (void)sendOSCMsg:(NSString *)msg forPoints:(NSDictionary *)pts;
 
 

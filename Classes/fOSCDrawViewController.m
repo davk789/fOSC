@@ -83,7 +83,15 @@ static UInt32 idCount = 0;
     if (self) {
         // Custom initialization
         points = [[NSMutableDictionary alloc] init];
-        dispatcher = [[fOSCDispatcher alloc] init];
+    }
+    return self;
+}
+
+-(id)initWithDispatcher:(fOSCDispatcher *)disp {
+    self = [super init];
+    if (self) {
+        points = [[NSMutableDictionary alloc] init];
+        self.dispatcher = disp;
     }
     return self;
 }

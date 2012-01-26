@@ -12,10 +12,17 @@
 #import "fOSCSettingsViewController.h"
 
 @interface fOSCViewController : UIViewController {
+    UIButton *settingsButton;
     fOSCDrawViewController *drawController;
     fOSCSettingsViewController *settingsController;
     fOSCDispatcher *oscDispatcher;
 }
+
+@property (retain, nonatomic) IBOutlet UIButton *settingsButton;
+@property (retain, nonatomic) fOSCSettingsViewController *settingsController;
+@property (retain, nonatomic) fOSCDrawViewController *drawController;
+
+- (IBAction)switchViews:(id)sender;
 
 @end
 
