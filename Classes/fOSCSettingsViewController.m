@@ -7,10 +7,13 @@
 //
 
 #import "fOSCSettingsViewController.h"
+// used in getLocalIP only
+#import <ifaddrs.h>
+#import <arpa/inet.h>
 
 @implementation fOSCSettingsViewController
 
-@synthesize portField, ipField, dispatcher;
+@synthesize portField, ipField, localIPLabel, dispatcher;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil dispatcher:(fOSCDispatcher *)disp {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -67,31 +70,56 @@
     [defaults synchronize];	
 }
 
+// copied directly from http://stackoverflow.com/questions/7072989/iphone-ipad-how-to-get-my-ip-address-programmatically
+- (void)getLocalIP {    
+    NSString *address = @"error";
+    struct ifaddrs *interfaces = NULL;
+    struct ifaddrs *temp_addr = NULL;
+    int success = 0;
+    // retrieve the current interfaces - returns 0 on success
+    success = getifaddrs(&interfaces);
+    if (success == 0) {
+        // Loop through linked list of interfaces
+        temp_addr = interfaces;
+        while(temp_addr != NULL) {
+            if(temp_addr->ifa_addr->sa_family == AF_INET) {
+                // Check if interface is en0 which is the wifi connection on the iPhone
+                if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
+                    // Get NSString from C String
+                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];               
+                }
+            }
+            temp_addr = temp_addr->ifa_next;
+        }
+    }
+    // Free memory
+    freeifaddrs(interfaces);
+    [localIPLabel setText:address];
+    
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
     portField.delegate = self;
     ipField.delegate = self;
 
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
+    // probably should verify the data here
     NSString *port = [prefs stringForKey:@"outport"];
     if (port) {
         self.portField.text = port;
-    }
-    else {
-        NSLog(@"\nA problem occurred with the port number %@\n", port);
     }
     
     NSString *ip = [prefs stringForKey:@"hostip"];
     if (ip) {
         self.ipField.text = ip;
     }
-    else {
-        NSLog(@"\nA problem occurred with the ip address %@\n", ip);
-    }
+    
+    [self getLocalIP];
     
 }
 

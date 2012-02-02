@@ -9,16 +9,20 @@
 #import "fOSCDispatcher.h"
 
 @interface fOSCSettingsViewController : UIViewController <UITextFieldDelegate> {
-    UITextField *portField; // the default text will display this value, from the dispatcher
+    UITextField *portField;
     UITextField *ipField;
+    UILabel *localIPLabel;
     fOSCDispatcher *dispatcher;
 }
 
 @property (retain, nonatomic) fOSCDispatcher *dispatcher;
 @property (retain, nonatomic) IBOutlet UITextField *portField, *ipField;
+@property (retain, nonatomic) IBOutlet UILabel *localIPLabel;
 
 - (IBAction)updateIP:(id)sender;
 - (IBAction)updatePort:(id)sender;
+
+- (void)getLocalIP;
 
 - (id)initWithDispatcher:(fOSCDispatcher *)disp;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil dispatcher:(fOSCDispatcher *)disp;
