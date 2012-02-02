@@ -23,8 +23,7 @@ static UInt32 idCount = 0;
 
 @implementation NSNumber(fOSCAdditions)
 + (NSNumber *)generateID {
-    NSLog(@"\nid count is %lu\n", idCount);
-    idCount = ++idCount % 65536; // up to 2**16 note polyphony. should be good enough for touch
+    idCount = ++idCount % 65536; // 2**16 available IDs. should be good enough for touch
     return [NSNumber numberWithInt:idCount];
 }
 
