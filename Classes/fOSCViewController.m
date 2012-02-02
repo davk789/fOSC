@@ -32,12 +32,37 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    NSString *ip = [prefs stringForKey:@"hostip"];
+    if (!ip) {
+        ip = @"192.168.1.100";
+        [prefs setObject:ip forKey:@"hostip"];
+        [prefs synchronize];
+    }
+    
+    NSString *port = [prefs stringForKey:@"outport"];
+    if (!port) {
+        port = @"57200";
+        [prefs setObject:port forKey:@"outport"];
+        [prefs synchronize];
+    }    
+    
     oscDispatcher = [[fOSCDispatcher alloc] init];
+    
+    oscDispatcher.ip = ip;
+    // probably should check for junk values here
+    oscDispatcher.port = [NSNumber numberWithInt:[port intValue]];
 
     drawController = [[fOSCDrawViewController alloc] initWithDispatcher:oscDispatcher];
     
 	[self.view insertSubview:drawController.view atIndex: 0];
+    
+    self.settingsButton.hidden = YES;
+    
+    [ip release];
+    [port release];
     
 }
 
@@ -46,6 +71,7 @@
         [settingsController.view removeFromSuperview];
         [self.view insertSubview:drawController.view atIndex:0];
     }
+    self.settingsButton.hidden = YES;
 }
 
 - (IBAction)switchViews:(id)sender {
@@ -54,6 +80,9 @@
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
 
     if (self.settingsController.view.superview == nil) {
+        
+        [self.settingsButton setHidden:YES];
+        
         if (self.settingsController == nil) {
             fOSCSettingsViewController *contr = [[fOSCSettingsViewController alloc] initWithNibName:@"fOSCSettingsViewController"                   
                                                                                              bundle:nil
@@ -73,6 +102,7 @@
 		[drawController viewDidAppear:YES];
 
     } else {
+        [self.settingsButton setHidden:NO];
         if (self.drawController == nil) {
             fOSCDrawViewController *contr = [[fOSCDrawViewController alloc] initWithDispatcher:oscDispatcher];
             self.drawController = contr;

@@ -54,6 +54,7 @@
     NSString *key = @"hostip";
     NSString *value = ipField.text;
     [defaults setObject:value forKey:key];
+    self.dispatcher.ip = value;
     [defaults synchronize];
 }
 
@@ -62,6 +63,7 @@
     NSString *key = @"outport";
     NSString *value = portField.text;
     [defaults setObject:value forKey:key];
+    self.dispatcher.port = [NSNumber numberWithInt:[value intValue]];
     [defaults synchronize];	
 }
 
@@ -80,8 +82,7 @@
         self.portField.text = port;
     }
     else {
-        [prefs setObject:@"57199" forKey:@"outport"];
-        self.portField.text = @"57199";
+        NSLog(@"\nA problem occurred with the port number %@\n", port);
     }
     
     NSString *ip = [prefs stringForKey:@"hostip"];
@@ -89,12 +90,9 @@
         self.ipField.text = ip;
     }
     else {
-        [prefs setObject:@"192.168.1.100" forKey:@"hostip"];
-        self.ipField.text = @"192.168.1.100";
+        NSLog(@"\nA problem occurred with the ip address %@\n", ip);
     }
     
-    [prefs synchronize];
-
 }
 
 - (void)viewDidUnload {
