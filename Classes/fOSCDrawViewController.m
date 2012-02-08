@@ -47,7 +47,6 @@ static UInt32 idCount = 0;
 
 @implementation NSDictionary(fOSCAdditions)
 - (NSNumber *)nearestKeyWithX:(int)x y:(int)y {
-    printf("\nx: %i\ty: %i", x, y);
     int voiceID = -1;
     
     float pointTotal = x + y;
@@ -143,7 +142,9 @@ static UInt32 idCount = 0;
 	for (UITouch *touch in touches) {
 		CGPoint location = [touch locationInView:drawView]; 
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
-        [points setObject:nsLocation forKey:[NSNumber generateID]];
+        NSNumber *voiceID = [NSNumber generateID];
+        [points setObject:nsLocation forKey:voiceID];
+        NSLog(@"\n/fOSC/start %@ %@", voiceID, nsLocation);
 	}
     drawView.points = points;
     [self sendOSCMsg:@"/fOSC/start" forPoints:points];
@@ -158,11 +159,13 @@ static UInt32 idCount = 0;
         NSNumber *voiceID = [points nearestKeyWithX:location.x y:location.y];
         
         NSValue *point = [points objectForKey:voiceID];
+        NSLog(@"\n/fOSC/end %@ %@", voiceID, point);
         [removed setObject:point forKey:voiceID];
         
 		[points removeObjectForKey:voiceID];
 	}
-    drawView.points = points; // is this the right thing to do here?
+    drawView.points = points;
+
     [self sendOSCMsg:@"/fOSC/end" forPoints:removed];
 	[drawView setNeedsDisplay];
     [removed autorelease];
@@ -178,7 +181,7 @@ static UInt32 idCount = 0;
         CGPoint location = [touch locationInView:drawView];
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
         NSNumber *voiceID = [points nearestKeyWithX:location.x y:location.y];
-        
+//        NSLog(@"\n/fOSC/move %@ %@", voiceID, nsLocation);
         [points setObject:nsLocation forKey:voiceID];
         ++i;
     }
