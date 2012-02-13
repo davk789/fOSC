@@ -7,6 +7,7 @@
 //
 
 #import "fOSCSettingsViewController.h"
+#import "fOSCDispatcher.h"
 // used in getLocalIP only
 #import <ifaddrs.h>
 #import <arpa/inet.h>

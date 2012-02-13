@@ -6,7 +6,8 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 #import <UIKit/UIKit.h>
-#import "fOSCDispatcher.h"
+
+@class fOSCDispatcher;
 
 @interface fOSCSettingsViewController : UIViewController <UITextFieldDelegate> {
     UITextField *portField;

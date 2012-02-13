@@ -16,13 +16,14 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		28D7ACF80DDB3853001CB0EB /* fOSCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* fOSCViewController.m */; };
 		5202FECB1466F8AC0023350F /* fOSCDrawViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5202FECA1466F8AC0023350F /* fOSCDrawViewController.m */; };
-		521CF26314DB414300F0365C /* testsynth.scd in Resources */ = {isa = PBXBuildFile; fileRef = 521CF26214DB414300F0365C /* testsynth.scd */; };
+		521CF26514E386CB00F0365C /* processlog.sh in Resources */ = {isa = PBXBuildFile; fileRef = 521CF26414E386CB00F0365C /* processlog.sh */; };
 		526BA1A5144CD9F700D74291 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 526BA1A4144CD9F700D74291 /* CFNetwork.framework */; };
 		526CB2F31442C2C90069DAA1 /* fOSCDrawView.m in Sources */ = {isa = PBXBuildFile; fileRef = 526CB2F21442C2C90069DAA1 /* fOSCDrawView.m */; };
 		52999CFB1455159E00073B1A /* sun-72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 52999CFA1455159E00073B1A /* sun-72x72.png */; };
 		52999D011456FF4600073B1A /* Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 52999D001456FF4600073B1A /* Notes.rtf */; };
+		52A8DCDF14E9750200B34216 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DCDE14E9750200B34216 /* AsyncUdpSocket.m */; };
+		52A8DCE614E97D2300B34216 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DCE514E97D2300B34216 /* AsyncSocket.m */; };
 		52C4C250144A047900FEC69A /* fOSCDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4C24F144A047900FEC69A /* fOSCDispatcher.m */; };
-		52C4C253144A061A00FEC69A /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4C252144A061A00FEC69A /* AsyncUdpSocket.m */; };
 		52EBE76C1475665A00BBE838 /* fOSCSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EBE76A1475665900BBE838 /* fOSCSettingsViewController.m */; };
 		52EBE76D1475665A00BBE838 /* fOSCSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52EBE76B1475665900BBE838 /* fOSCSettingsViewController.xib */; };
 /* End PBXBuildFile section */
@@ -42,16 +43,18 @@
 		32CA4F630368D1EE00C91783 /* fOSC_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSC_Prefix.pch; sourceTree = "<group>"; };
 		5202FEC91466F8AC0023350F /* fOSCDrawViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSCDrawViewController.h; sourceTree = "<group>"; };
 		5202FECA1466F8AC0023350F /* fOSCDrawViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fOSCDrawViewController.m; sourceTree = "<group>"; };
-		521CF26214DB414300F0365C /* testsynth.scd */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testsynth.scd; sourceTree = "<group>"; };
+		521CF26414E386CB00F0365C /* processlog.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = processlog.sh; path = resources/processlog.sh; sourceTree = "<group>"; };
 		526BA1A4144CD9F700D74291 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		526CB2F11442C2C90069DAA1 /* fOSCDrawView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSCDrawView.h; sourceTree = "<group>"; };
 		526CB2F21442C2C90069DAA1 /* fOSCDrawView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fOSCDrawView.m; sourceTree = "<group>"; };
 		52999CFA1455159E00073B1A /* sun-72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sun-72x72.png"; sourceTree = "<group>"; };
 		52999D001456FF4600073B1A /* Notes.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Notes.rtf; sourceTree = "<group>"; };
+		52A8DCDD14E9750200B34216 /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncUdpSocket.h; path = Include/AsyncUdpSocket.h; sourceTree = "<group>"; };
+		52A8DCDE14E9750200B34216 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncUdpSocket.m; path = Include/AsyncUdpSocket.m; sourceTree = "<group>"; };
+		52A8DCE414E97D2300B34216 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
+		52A8DCE514E97D2300B34216 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
 		52C4C24E144A047900FEC69A /* fOSCDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSCDispatcher.h; sourceTree = "<group>"; };
 		52C4C24F144A047900FEC69A /* fOSCDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fOSCDispatcher.m; sourceTree = "<group>"; };
-		52C4C251144A061A00FEC69A /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncUdpSocket.h; path = ../cocoaasyncsocket/RunLoop/AsyncUdpSocket.h; sourceTree = "<group>"; };
-		52C4C252144A061A00FEC69A /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncUdpSocket.m; path = ../cocoaasyncsocket/RunLoop/AsyncUdpSocket.m; sourceTree = "<group>"; };
 		52EBE7691475665900BBE838 /* fOSCSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSCSettingsViewController.h; sourceTree = "<group>"; };
 		52EBE76A1475665900BBE838 /* fOSCSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fOSCSettingsViewController.m; sourceTree = "<group>"; };
 		52EBE76B1475665900BBE838 /* fOSCSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = fOSCSettingsViewController.xib; path = Classes/fOSCSettingsViewController.xib; sourceTree = "<group>"; };
@@ -83,10 +86,10 @@
 				28D7ACF60DDB3853001CB0EB /* fOSCViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* fOSCViewController.m */,
 				5202FEC91466F8AC0023350F /* fOSCDrawViewController.h */,
-				5202FECA1466F8AC0023350F /* fOSCDrawViewController.m */,
 				526CB2F11442C2C90069DAA1 /* fOSCDrawView.h */,
 				526CB2F21442C2C90069DAA1 /* fOSCDrawView.m */,
 				52C4C24E144A047900FEC69A /* fOSCDispatcher.h */,
+				5202FECA1466F8AC0023350F /* fOSCDrawViewController.m */,
 				52C4C24F144A047900FEC69A /* fOSCDispatcher.m */,
 			);
 			path = Classes;
@@ -126,7 +129,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				521CF26214DB414300F0365C /* testsynth.scd */,
+				521CF26414E386CB00F0365C /* processlog.sh */,
 				52EBE76B1475665900BBE838 /* fOSCSettingsViewController.xib */,
 				52999CFA1455159E00073B1A /* sun-72x72.png */,
 				2899E5210DE3E06400AC0155 /* fOSCViewController.xib */,
@@ -150,8 +153,10 @@
 		52C4C254144A066A00FEC69A /* Include */ = {
 			isa = PBXGroup;
 			children = (
-				52C4C251144A061A00FEC69A /* AsyncUdpSocket.h */,
-				52C4C252144A061A00FEC69A /* AsyncUdpSocket.m */,
+				52A8DCE414E97D2300B34216 /* AsyncSocket.h */,
+				52A8DCE514E97D2300B34216 /* AsyncSocket.m */,
+				52A8DCDD14E9750200B34216 /* AsyncUdpSocket.h */,
+				52A8DCDE14E9750200B34216 /* AsyncUdpSocket.m */,
 			);
 			name = Include;
 			sourceTree = "<group>";
@@ -213,7 +218,7 @@
 				52999CFB1455159E00073B1A /* sun-72x72.png in Resources */,
 				52999D011456FF4600073B1A /* Notes.rtf in Resources */,
 				52EBE76D1475665A00BBE838 /* fOSCSettingsViewController.xib in Resources */,
-				521CF26314DB414300F0365C /* testsynth.scd in Resources */,
+				521CF26514E386CB00F0365C /* processlog.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -229,9 +234,10 @@
 				28D7ACF80DDB3853001CB0EB /* fOSCViewController.m in Sources */,
 				526CB2F31442C2C90069DAA1 /* fOSCDrawView.m in Sources */,
 				52C4C250144A047900FEC69A /* fOSCDispatcher.m in Sources */,
-				52C4C253144A061A00FEC69A /* AsyncUdpSocket.m in Sources */,
 				5202FECB1466F8AC0023350F /* fOSCDrawViewController.m in Sources */,
 				52EBE76C1475665A00BBE838 /* fOSCSettingsViewController.m in Sources */,
+				52A8DCDF14E9750200B34216 /* AsyncUdpSocket.m in Sources */,
+				52A8DCE614E97D2300B34216 /* AsyncSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

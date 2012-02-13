@@ -7,7 +7,8 @@
 //
 
 #import "fOSCDrawViewController.h"
-
+#import "fOSCDispatcher.h"
+#import "fOSCDrawView.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -144,7 +145,6 @@ static UInt32 idCount = 0;
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
         NSNumber *voiceID = [NSNumber generateID];
         [points setObject:nsLocation forKey:voiceID];
-        NSLog(@"\n/fOSC/start %@ %@", voiceID, nsLocation);
 	}
     drawView.points = points;
     [self sendOSCMsg:@"/fOSC/start" forPoints:points];
@@ -159,7 +159,6 @@ static UInt32 idCount = 0;
         NSNumber *voiceID = [points nearestKeyWithX:location.x y:location.y];
         
         NSValue *point = [points objectForKey:voiceID];
-        NSLog(@"\n/fOSC/end %@ %@", voiceID, point);
         [removed setObject:point forKey:voiceID];
         
 		[points removeObjectForKey:voiceID];
@@ -181,7 +180,6 @@ static UInt32 idCount = 0;
         CGPoint location = [touch locationInView:drawView];
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
         NSNumber *voiceID = [points nearestKeyWithX:location.x y:location.y];
-//        NSLog(@"\n/fOSC/move %@ %@", voiceID, nsLocation);
         [points setObject:nsLocation forKey:voiceID];
         ++i;
     }

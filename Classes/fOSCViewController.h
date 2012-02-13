@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "fOSCDrawViewController.h"
-#import "fOSCDispatcher.h"
-#import "fOSCSettingsViewController.h"
+
+@class fOSCDrawViewController;
+@class fOSCSettingsViewController;
+@class fOSCDispatcher;
 
 @interface fOSCViewController : UIViewController {
     UIButton *settingsButton;

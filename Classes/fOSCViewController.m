@@ -7,6 +7,10 @@
 //
 
 #import "fOSCViewController.h"
+#import "fOSCDrawViewController.h"
+#import "fOSCDispatcher.h"
+#import "fOSCSettingsViewController.h"
+
 
 @implementation fOSCViewController
 

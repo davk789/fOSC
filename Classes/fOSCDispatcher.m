@@ -61,6 +61,10 @@
     [socket release];
 }
 
+#pragma mark TCP connection utilities
+
+#pragma mark output
+
 - (id)sendMsg:(id)first, ... {
     // collect the arguments in msg
     va_list args;
@@ -71,6 +75,7 @@
         
         [msg addObject:obj];
     }
+    NSLog(@"\n%@, %@, %@, %@", [msg objectAtIndex:0], [msg objectAtIndex:1], [msg objectAtIndex:2], [msg objectAtIndex:3]);
     // use the msg to get the properly formatted binary data to send
     NSData *outData = [self fOSCDataWithAddress:[msg objectAtIndex:0] 
                                      identifier:(NSNumber *)[msg objectAtIndex:1]

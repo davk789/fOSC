@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "fOSCDispatcher.h"
-#import "fOSCDrawView.h"
+
+@class fOSCDispatcher;
+@class fOSCDrawView;
 
 @interface fOSCDrawViewController : UIViewController {
     fOSCDispatcher *dispatcher;
