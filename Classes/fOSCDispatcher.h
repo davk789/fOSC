@@ -13,19 +13,28 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "AsyncUdpSocket.h"
+
+@class AsyncUdpSocket;
+@class AsyncSocket;
 
 @interface fOSCDispatcher : NSObject {
-    AsyncUdpSocket *socket;
+    AsyncUdpSocket *udpSocket;
+    AsyncSocket *tcpSocket;
+    
+    NSNumber *protocol; // 0 = udp , 1 = tcp
     NSString *ip;
     NSNumber *port;
 }
 
-@property (retain) NSString *ip;
-@property (retain) NSNumber *port;
+@property (retain, nonatomic) NSNumber *protocol;
+@property (retain, nonatomic) NSString *ip;
+@property (retain, nonatomic) NSNumber *port;
 
 - (id)sendMsg:(id)first, ...;
 - (NSData *)fOSCDataWithAddress:(NSString *)addr identifier:(NSNumber *)i x:(NSNumber *)x y:(NSNumber *)y;
+- (void)connect;
+- (void)disconnect;
+
 
 @end
 

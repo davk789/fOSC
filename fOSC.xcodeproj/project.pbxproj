@@ -86,10 +86,10 @@
 				28D7ACF60DDB3853001CB0EB /* fOSCViewController.h */,
 				28D7ACF70DDB3853001CB0EB /* fOSCViewController.m */,
 				5202FEC91466F8AC0023350F /* fOSCDrawViewController.h */,
+				5202FECA1466F8AC0023350F /* fOSCDrawViewController.m */,
 				526CB2F11442C2C90069DAA1 /* fOSCDrawView.h */,
 				526CB2F21442C2C90069DAA1 /* fOSCDrawView.m */,
 				52C4C24E144A047900FEC69A /* fOSCDispatcher.h */,
-				5202FECA1466F8AC0023350F /* fOSCDrawViewController.m */,
 				52C4C24F144A047900FEC69A /* fOSCDispatcher.m */,
 			);
 			path = Classes;

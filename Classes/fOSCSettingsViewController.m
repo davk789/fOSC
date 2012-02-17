@@ -14,7 +14,7 @@
 
 @implementation fOSCSettingsViewController
 
-@synthesize portField, ipField, localIPLabel, dispatcher;
+@synthesize portField, ipField, protocolControl, localIPLabel, dispatcher;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil dispatcher:(fOSCDispatcher *)disp {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -71,8 +71,17 @@
     [defaults synchronize];	
 }
 
+- (IBAction)setProtocol:(id)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *key = @"protocol";
+    NSString *value = [NSString stringWithFormat:@"%i", protocolControl.selectedSegmentIndex];
+    [defaults setObject:value forKey:key];
+    self.dispatcher.protocol = [NSNumber numberWithInt:protocolControl.selectedSegmentIndex];
+    [defaults synchronize];
+}
+
 // copied directly from http://stackoverflow.com/questions/7072989/iphone-ipad-how-to-get-my-ip-address-programmatically
-- (void)getLocalIP {    
+- (NSString *)getLocalIP {    
     NSString *address = @"error";
     struct ifaddrs *interfaces = NULL;
     struct ifaddrs *temp_addr = NULL;
@@ -95,7 +104,7 @@
     }
     // Free memory
     freeifaddrs(interfaces);
-    [localIPLabel setText:address];
+    return address;
     
 }
 
@@ -106,7 +115,9 @@
     
     portField.delegate = self;
     ipField.delegate = self;
-
+    
+    [self.dispatcher disconnect];
+    
     NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
     
     // probably should verify the data here
@@ -120,8 +131,20 @@
         self.ipField.text = ip;
     }
     
-    [self getLocalIP];
+    NSString *localIP = [self getLocalIP];
+    self.localIPLabel.text = localIP;
     
+    NSString *protocol = [prefs stringForKey:@"protocol"];
+    if (protocol) {
+        self.protocolControl.selectedSegmentIndex = [protocol intValue];
+    }
+    
+}
+
+- (void)viewWillUnload {
+    // this should work because I am freeing the view when switching over to the draw view
+    [self.dispatcher connect];
+
 }
 
 - (void)viewDidUnload {
@@ -130,6 +153,8 @@
     // e.g. self.myOutlet = nil;
     [portField release];
     [ipField release];
+    [protocolControl release];
+    [localIPLabel release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

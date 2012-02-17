@@ -51,14 +51,26 @@
         port = @"57200";
         [prefs setObject:port forKey:@"outport"];
         [prefs synchronize];
-    }    
+    }
+    
+    NSString *protocol = [prefs stringForKey:@"protocol"];
+    if (!protocol) {
+        protocol = @"0";
+        [prefs setObject:protocol forKey:@"protocol"];
+        [prefs synchronize];
+    }
     
     oscDispatcher = [[fOSCDispatcher alloc] init];
     
     oscDispatcher.ip = ip;
     // probably should check for junk values here
     oscDispatcher.port = [NSNumber numberWithInt:[port intValue]];
-
+    oscDispatcher.protocol = [NSNumber numberWithInt:[protocol intValue]];
+    
+    if ([oscDispatcher.protocol intValue] == 1) {
+        [oscDispatcher connect];
+    }
+    
     drawController = [[fOSCDrawViewController alloc] initWithDispatcher:oscDispatcher];
     
 	[self.view insertSubview:drawController.view atIndex: 0];
