@@ -45,6 +45,7 @@ s.boot;
 ~offResp = OSCresponderNode(NetAddr(~addr, nil), '/fOSC/end', ~end).add;
 ~moveResp = OSCresponderNode(NetAddr(~addr, nil), '/fOSC/move', ~move).add;
 )
+NetAddr.langPort
 ( //625
 ~tester = Task({
 	var nodes = [      958,
