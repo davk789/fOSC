@@ -11,8 +11,11 @@
 #import "fOSCDrawView.h"
 #include <math.h>
 #include <stdlib.h>
+#import <CoreMotion/CoreMotion.h>
+#import <Foundation/Foundation.h>
 
 static UInt32 idCount = 0;
+#define MOTION_REFRESH_RATE 45.0
 
 #pragma mark fOSC CATEGORIES
 
@@ -70,7 +73,7 @@ static UInt32 idCount = 0;
 }
 @end
 
-#pragma mark CLASS IMPLEMENTATION
+#pragma mark - CLASS IMPLEMENTATION
 
 @implementation fOSCDrawViewController
 
@@ -82,6 +85,8 @@ static UInt32 idCount = 0;
     if (self) {
         // Custom initialization
         points = [[NSMutableDictionary alloc] init];
+        motionManager = [[CMMotionManager alloc] init];
+        referenceAttitude = nil;
     }
     return self;
 }
@@ -109,7 +114,7 @@ static UInt32 idCount = 0;
     [super dealloc];
 }
 
-#pragma mark - View lifecycle
+#pragma mark View lifecycle
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
@@ -120,8 +125,10 @@ static UInt32 idCount = 0;
     [view setMultipleTouchEnabled:YES];
     self.view = view;
     drawView = view; // keep an extra reference to access the methods of the subclass
-    
     [view release];
+    
+    
+    
 }
 
 - (void)viewDidUnload
@@ -137,16 +144,59 @@ static UInt32 idCount = 0;
 //	return YES;
 //}
 
-#pragma mark - touch section
+#pragma mark utility functions
+
+- (void)startMotionUpdates {
+    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+    CMAttitude *attitude = deviceMotion.attitude;
+    referenceAttitude = [attitude retain];
+    [motionManager startGyroUpdates];
+    // start the accelerometer here as well
+}
+
+- (void)stopMotionUpdates {
+    // stop the accelerometer here as well
+    [motionManager stopGyroUpdates];
+}
+
+- (void)sendOSCMsg:(NSString *)msg forPoints:(NSDictionary *)pts {
+    int i = 0;
+    
+    //    CMAttitude *attitude = 
+    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+    CMAttitude *attitude = deviceMotion.attitude;
+    
+    if (referenceAttitude) {
+        [attitude multiplyByInverseOfAttitude:referenceAttitude];
+    }
+    
+    for (id touchID in pts) {
+        CGPoint cgPoint = [[pts objectForKey:touchID] CGPointValue];
+        
+        NSNumber *x = [[NSNumber numberWithInt:(int)cgPoint.x] widthUnitValue];
+        NSNumber *y = [[NSNumber numberWithInt:(int)cgPoint.y] heightUnitValue];
+        
+        [dispatcher sendMsg:msg, touchID, x, y, attitude.pitch, attitude.yaw, attitude.roll, nil];
+        i++; 
+    }
+    
+}
+
+#pragma mark touch section
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	for (UITouch *touch in touches) {
+	if ([points count] == 0) {
+        [self startMotionUpdates];
+    }
+    
+    for (UITouch *touch in touches) {
 		CGPoint location = [touch locationInView:drawView]; 
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
         NSNumber *voiceID = [NSNumber generateID];
         [points setObject:nsLocation forKey:voiceID];
 	}
     drawView.points = points;
+    
     [self sendOSCMsg:@"/fOSC/start" forPoints:points];
 	[drawView setNeedsDisplay];
 }
@@ -164,7 +214,11 @@ static UInt32 idCount = 0;
 		[points removeObjectForKey:voiceID];
 	}
     drawView.points = points;
-
+    
+    if ([points count] == 0) {
+        [self stopMotionUpdates];
+    }
+    
     [self sendOSCMsg:@"/fOSC/end" forPoints:removed];
 	[drawView setNeedsDisplay];
     [removed autorelease];
@@ -186,20 +240,6 @@ static UInt32 idCount = 0;
     drawView.points = points;
     [self sendOSCMsg:@"/fOSC/move" forPoints:points];
 	[drawView setNeedsDisplay];
-}
-
-- (void)sendOSCMsg:(NSString *)msg forPoints:(NSDictionary *)pts {
-    int i = 0;
-    for (id touchID in pts) {
-        CGPoint cgPoint = [[pts objectForKey:touchID] CGPointValue];
-        
-        NSNumber *x = [[NSNumber numberWithInt:(int)cgPoint.x] widthUnitValue];
-        NSNumber *y = [[NSNumber numberWithInt:(int)cgPoint.y] heightUnitValue];
-        
-        [dispatcher sendMsg:msg, touchID, x, y, nil];
-        i++; 
-    }
-
 }
 
 @end

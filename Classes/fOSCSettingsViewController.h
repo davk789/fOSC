@@ -24,7 +24,7 @@
 
 - (IBAction)updateIP:(id)sender;
 - (IBAction)updatePort:(id)sender;
-- (IBAction)setProtocol:(id)sender;
+- (IBAction)updateProtocol:(id)sender;
 
 - (NSString *)getLocalIP;
 

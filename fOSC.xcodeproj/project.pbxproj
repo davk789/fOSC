@@ -23,6 +23,7 @@
 		52999D011456FF4600073B1A /* Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 52999D001456FF4600073B1A /* Notes.rtf */; };
 		52A8DCDF14E9750200B34216 /* AsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DCDE14E9750200B34216 /* AsyncUdpSocket.m */; };
 		52A8DCE614E97D2300B34216 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DCE514E97D2300B34216 /* AsyncSocket.m */; };
+		52A8DCF414F8070300B34216 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52A8DCF314F8070300B34216 /* CoreMotion.framework */; };
 		52C4C250144A047900FEC69A /* fOSCDispatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 52C4C24F144A047900FEC69A /* fOSCDispatcher.m */; };
 		52EBE76C1475665A00BBE838 /* fOSCSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52EBE76A1475665900BBE838 /* fOSCSettingsViewController.m */; };
 		52EBE76D1475665A00BBE838 /* fOSCSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 52EBE76B1475665900BBE838 /* fOSCSettingsViewController.xib */; };
@@ -53,6 +54,7 @@
 		52A8DCDE14E9750200B34216 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncUdpSocket.m; path = Include/AsyncUdpSocket.m; sourceTree = "<group>"; };
 		52A8DCE414E97D2300B34216 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		52A8DCE514E97D2300B34216 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
+		52A8DCF314F8070300B34216 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		52C4C24E144A047900FEC69A /* fOSCDispatcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSCDispatcher.h; sourceTree = "<group>"; };
 		52C4C24F144A047900FEC69A /* fOSCDispatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = fOSCDispatcher.m; sourceTree = "<group>"; };
 		52EBE7691475665900BBE838 /* fOSCSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fOSCSettingsViewController.h; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52A8DCF414F8070300B34216 /* CoreMotion.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -142,6 +145,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				52A8DCF314F8070300B34216 /* CoreMotion.framework */,
 				526BA1A4144CD9F700D74291 /* CFNetwork.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,

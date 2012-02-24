@@ -11,6 +11,7 @@
 #import "fOSCDispatcher.h"
 #import "fOSCSettingsViewController.h"
 
+#define TCP_DISABLED YES
 
 @implementation fOSCViewController
 
@@ -54,7 +55,7 @@
     }
     
     NSString *protocol = [prefs stringForKey:@"protocol"];
-    if (!protocol) {
+    if (!protocol || TCP_DISABLED) {
         protocol = @"0";
         [prefs setObject:protocol forKey:@"protocol"];
         [prefs synchronize];

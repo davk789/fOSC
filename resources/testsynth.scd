@@ -17,6 +17,7 @@ SynthDef("fOSC_testSynth", {
 	Out.ar(0, aSig.dup);
 }).load(s, [1.0, 1.0]);
 
+
 s.boot;
 ~start = { |time,r,msg|
 	var node = msg[1];
@@ -40,10 +41,12 @@ s.boot;
 	s.sendMsg('n_set', node, 'freq', freq, 'amp', amp);
 };
 
-~addr = "192.168.1.103";
-~onResp = OSCresponderNode(NetAddr(~addr, nil), '/fOSC/start', ~start).add;
-~offResp = OSCresponderNode(NetAddr(~addr, nil), '/fOSC/end', ~end).add;
-~moveResp = OSCresponderNode(NetAddr(~addr, nil), '/fOSC/move', ~move).add;
+~addr = NetAddr("192.168.1.101", nil);//
+//~addr.connect({"disconnected".postln});
+//NetAddr.localAddr.connect
+~onResp = OSCresponderNode(~addr, '/fOSC/start', ~start).add;
+~offResp = OSCresponderNode(~addr, '/fOSC/end', ~end).add;
+~moveResp = OSCresponderNode(~addr, '/fOSC/move', ~move).add;
 )
 NetAddr.langPort
 ( //625

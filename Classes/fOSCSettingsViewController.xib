@@ -246,7 +246,6 @@
 						<string key="NSFrame">{{429, 243}, {135, 30}}</string>
 						<reference key="NSSuperview" ref="766721923"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:289</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -325,6 +324,14 @@
 					<int key="connectionID">28</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">protocolControl</string>
+						<reference key="source" ref="841351856"/>
+						<reference key="destination" ref="319063215"/>
+					</object>
+					<int key="connectionID">35</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
 						<string key="label">updatePort:</string>
 						<reference key="source" ref="220847577"/>
@@ -344,12 +351,12 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">setProtocol:</string>
+						<string key="label">updateProtocol:</string>
 						<reference key="source" ref="319063215"/>
-						<reference key="destination" ref="606714003"/>
+						<reference key="destination" ref="841351856"/>
 						<int key="IBEventType">13</int>
 					</object>
-					<int key="connectionID">32</int>
+					<int key="connectionID">34</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -465,7 +472,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">32</int>
+			<int key="maxID">35</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -473,21 +480,21 @@
 					<string key="className">fOSCSettingsViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="setProtocol:">id</string>
 						<string key="updateIP:">id</string>
 						<string key="updatePort:">id</string>
+						<string key="updateProtocol:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="setProtocol:">
-							<string key="name">setProtocol:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="updateIP:">
 							<string key="name">updateIP:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="updatePort:">
 							<string key="name">updatePort:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="updateProtocol:">
+							<string key="name">updateProtocol:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 					</dictionary>

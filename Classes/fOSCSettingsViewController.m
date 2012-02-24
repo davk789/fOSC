@@ -12,6 +12,8 @@
 #import <ifaddrs.h>
 #import <arpa/inet.h>
 
+#define TCP_DISABLED YES
+
 @implementation fOSCSettingsViewController
 
 @synthesize portField, ipField, protocolControl, localIPLabel, dispatcher;
@@ -23,6 +25,9 @@
         self.dispatcher = disp;
         self.portField = [[UITextField alloc] init];
         self.ipField = [[UITextField alloc] init];
+        if(TCP_DISABLED) {
+            self.protocolControl.hidden = YES;
+        }
     }
     
     return self;
@@ -71,7 +76,7 @@
     [defaults synchronize];	
 }
 
-- (IBAction)setProtocol:(id)sender {
+- (IBAction)updateProtocol:(id)sender {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *key = @"protocol";
     NSString *value = [NSString stringWithFormat:@"%i", protocolControl.selectedSegmentIndex];

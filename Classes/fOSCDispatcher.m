@@ -83,12 +83,10 @@
         if (udpSocket) {
             [udpSocket release];
         }
-        tcpSocket = [[AsyncSocket alloc] init];
-        [self connect];
+        tcpSocket = [[AsyncSocket alloc] initWithDelegate:self];
     }
     else if ([pr intValue] == 0) { // 0 = udp
         if (tcpSocket) {
-            [tcpSocket disconnect];
             [tcpSocket release];
         }
         udpSocket = [[AsyncUdpSocket alloc] init];
