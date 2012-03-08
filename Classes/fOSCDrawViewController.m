@@ -85,8 +85,6 @@ static UInt32 idCount = 0;
     if (self) {
         // Custom initialization
         points = [[NSMutableDictionary alloc] init];
-        motionManager = [[CMMotionManager alloc] init];
-        referenceAttitude = nil;
     }
     return self;
 }
@@ -120,6 +118,10 @@ static UInt32 idCount = 0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    motionManager = [[CMMotionManager alloc] init];
+    motionManager.deviceMotionUpdateInterval = 1.0 / MOTION_REFRESH_RATE;
+    
+    [motionManager startDeviceMotionUpdates];
     
     fOSCDrawView *view = [[fOSCDrawView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [view setMultipleTouchEnabled:YES];
@@ -127,13 +129,13 @@ static UInt32 idCount = 0;
     drawView = view; // keep an extra reference to access the methods of the subclass
     [view release];
     
-    
-    
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    [motionManager stopDeviceMotionUpdates];
+    [motionManager release];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -146,23 +148,11 @@ static UInt32 idCount = 0;
 
 #pragma mark utility functions
 
-- (void)startMotionUpdates {
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-    CMAttitude *attitude = deviceMotion.attitude;
-    referenceAttitude = [attitude retain];
-    [motionManager startGyroUpdates];
-    // start the accelerometer here as well
-}
 
-- (void)stopMotionUpdates {
-    // stop the accelerometer here as well
-    [motionManager stopGyroUpdates];
-}
 
 - (void)sendOSCMsg:(NSString *)msg forPoints:(NSDictionary *)pts {
     int i = 0;
     
-    //    CMAttitude *attitude = 
     CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
     CMAttitude *attitude = deviceMotion.attitude;
     
@@ -175,8 +165,12 @@ static UInt32 idCount = 0;
         
         NSNumber *x = [[NSNumber numberWithInt:(int)cgPoint.x] widthUnitValue];
         NSNumber *y = [[NSNumber numberWithInt:(int)cgPoint.y] heightUnitValue];
+        NSNumber *pitch = [NSNumber numberWithFloat:(attitude.pitch/M_PI)];
+        NSNumber *roll = [NSNumber numberWithFloat:(attitude.roll/M_PI)];
+        NSNumber *yaw = [NSNumber numberWithFloat:(attitude.yaw/M_PI)];
         
-        [dispatcher sendMsg:msg, touchID, x, y, attitude.pitch, attitude.yaw, attitude.roll, nil];
+//        NSLog(@"%f %f %f\n", attitude.pitch, attitude.yaw, attitude.roll);
+        [dispatcher sendMsg:msg, touchID, x, y, pitch, roll, yaw, nil];
         i++; 
     }
     
@@ -185,10 +179,13 @@ static UInt32 idCount = 0;
 #pragma mark touch section
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	if ([points count] == 0) {
-        [self startMotionUpdates];
+
+    if ([points count] == 0) {
+        CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+        CMAttitude *attitude = deviceMotion.attitude;
+        referenceAttitude = [attitude retain];
     }
-    
+
     for (UITouch *touch in touches) {
 		CGPoint location = [touch locationInView:drawView]; 
         NSValue *nsLocation = [NSValue valueWithCGPoint:location];
@@ -214,10 +211,6 @@ static UInt32 idCount = 0;
 		[points removeObjectForKey:voiceID];
 	}
     drawView.points = points;
-    
-    if ([points count] == 0) {
-        [self stopMotionUpdates];
-    }
     
     [self sendOSCMsg:@"/fOSC/end" forPoints:removed];
 	[drawView setNeedsDisplay];

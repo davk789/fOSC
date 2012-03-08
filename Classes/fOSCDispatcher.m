@@ -128,16 +128,12 @@
         
         [msg addObject:obj];
     }
-    NSLog(@"\n%@, %@, %@, %@", [msg objectAtIndex:0], [msg objectAtIndex:1], [msg objectAtIndex:2], [msg objectAtIndex:3]);
     // use the msg to get the properly formatted binary data to send
-    NSData *outData = [self fOSCDataWithAddress:[msg objectAtIndex:0] 
-                                     identifier:(NSNumber *)[msg objectAtIndex:1]
-                                              x:(NSNumber *)[msg objectAtIndex:2]
-                                              y:(NSNumber *)[msg objectAtIndex:3]];
+    NSData *outData = [self buildOSCMessageWithArgs:msg];
     // ... and then send
     
     if ([protocol intValue] == 1) {
-        [tcpSocket writeData:outData withTimeout:3 tag:nil];
+        [tcpSocket writeData:outData withTimeout:3 tag:0];
     }
     else if ([protocol intValue] == 0) {
         [udpSocket sendData:outData toHost:ip port:[port intValue] withTimeout:-1 tag:1];
@@ -146,25 +142,30 @@
     return self;
 }
 
-- (NSData *)fOSCDataWithAddress:(NSString *)addr identifier:(NSNumber *)i x:(NSNumber *)x y:(NSNumber *)y {
-    // specifically, just make the osc data for this fOSC version. worry about reusability later
+- (NSData *)buildOSCMessageWithArgs:(NSArray *)args {
+
     NSMutableData *data = [NSMutableData data];
-    
+
+    NSString *addr = [args objectAtIndex:0];
+    NSNumber *i = [args objectAtIndex:1];
+        
     NSData *msgAddr = [[addr oscString] dataUsingEncoding:NSASCIIStringEncoding];
-    NSData *tags = [[@",iff" oscString] dataUsingEncoding:NSASCIIStringEncoding];
-    SInt32 swapI = [i oscInt];
-    CFSwappedFloat32 swapX = [x oscFloat];
-    CFSwappedFloat32 swapY = [y oscFloat];
-    NSData *iArg = [NSData dataWithBytes:&swapI length:4];
-    NSData *xArg = [NSData dataWithBytes:&swapX length:4];
-    NSData *yArg = [NSData dataWithBytes:&swapY length:4];
-    
     [data appendData:msgAddr];
+
+    // argument order: address identifier x y pitch roll yaw
+    NSData *tags = [[@",ifffff" oscString] dataUsingEncoding:NSASCIIStringEncoding];
     [data appendData:tags];
-    [data appendData:iArg];
-    [data appendData:xArg];
-    [data appendData:yArg];
     
+    SInt32 swapI = [i oscInt];    
+    NSData *iArg = [NSData dataWithBytes:&swapI length:4];
+    [data appendData:iArg];
+
+    for (int n = 2; n < [args count]; ++n) {
+        CFSwappedFloat32 swap = [[args objectAtIndex:n] oscFloat];
+        NSData *blob = [NSData dataWithBytes:&swap length:4];
+        [data appendData:blob];
+    }
+        
     if ([protocol intValue] == 1) { // tcp argument separator
         NSData *sep = [[@"\r\n\r\n" oscString] dataUsingEncoding:NSASCIIStringEncoding];
         [data appendData:sep];
@@ -172,6 +173,7 @@
     
     return data;
 }
+
 
 @end
 

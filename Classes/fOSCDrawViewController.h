@@ -25,8 +25,6 @@
 
 - (id)initWithDispatcher:(fOSCDispatcher *)disp;
 - (void)sendOSCMsg:(NSString *)msg forPoints:(NSDictionary *)pts;
-- (void)startMotionUpdates;
-- (void)stopMotionUpdates;
 
 
 @end

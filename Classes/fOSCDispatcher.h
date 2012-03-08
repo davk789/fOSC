@@ -31,7 +31,7 @@
 @property (retain, nonatomic) NSNumber *port;
 
 - (id)sendMsg:(id)first, ...;
-- (NSData *)fOSCDataWithAddress:(NSString *)addr identifier:(NSNumber *)i x:(NSNumber *)x y:(NSNumber *)y;
+- (NSData *)buildOSCMessageWithArgs:(NSArray *)args;
 - (void)connect;
 - (void)disconnect;
 
