@@ -16,16 +16,19 @@
 
 static UInt32 idCount = 0;
 #define MOTION_REFRESH_RATE 45.0
+#define ACCEL_GAIN 0.9
 
 #pragma mark fOSC CATEGORIES
 
 @interface NSNumber(fOSCAdditions)
+- (NSNumber *)clip;
 + (NSNumber *)generateID;
 - (NSNumber *)widthUnitValue;
 - (NSNumber *)heightUnitValue;
 @end
 
 @implementation NSNumber(fOSCAdditions)
+
 + (NSNumber *)generateID {
     idCount = ++idCount % 65536; // 2**16 available IDs. should be good enough for touch
     return [NSNumber numberWithInt:idCount];
@@ -155,6 +158,7 @@ static UInt32 idCount = 0;
     
     CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
     CMAttitude *attitude = deviceMotion.attitude;
+    CMAcceleration userAccel = deviceMotion.userAcceleration;
     
     if (referenceAttitude) {
         [attitude multiplyByInverseOfAttitude:referenceAttitude];
@@ -169,8 +173,11 @@ static UInt32 idCount = 0;
         NSNumber *roll = [NSNumber numberWithFloat:(attitude.roll/M_PI)];
         NSNumber *yaw = [NSNumber numberWithFloat:(attitude.yaw/M_PI)];
         
-//        NSLog(@"%f %f %f\n", attitude.pitch, attitude.yaw, attitude.roll);
-        [dispatcher sendMsg:msg, touchID, x, y, pitch, roll, yaw, nil];
+        NSNumber *accX = [NSNumber numberWithFloat:MIN(MAX(userAccel.x * ACCEL_GAIN, -1.0), 1.0)];
+        NSNumber *accY = [NSNumber numberWithFloat:MIN(MAX(userAccel.y * ACCEL_GAIN, -1.0), 1.0)];
+        NSNumber *accZ = [NSNumber numberWithFloat:MIN(MAX(userAccel.z * ACCEL_GAIN, -1.0), 1.0)];
+        
+        [dispatcher sendMsg:msg, touchID, x, y, pitch, roll, yaw, accX, accY, accZ, nil];
         i++; 
     }
     

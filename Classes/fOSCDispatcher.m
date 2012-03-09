@@ -152,8 +152,8 @@
     NSData *msgAddr = [[addr oscString] dataUsingEncoding:NSASCIIStringEncoding];
     [data appendData:msgAddr];
 
-    // argument order: address identifier x y pitch roll yaw
-    NSData *tags = [[@",ifffff" oscString] dataUsingEncoding:NSASCIIStringEncoding];
+    // argument order: address identifier x y pitch roll yaw accelX accelY accelZ
+    NSData *tags = [[@",iffffffff" oscString] dataUsingEncoding:NSASCIIStringEncoding];
     [data appendData:tags];
     
     SInt32 swapI = [i oscInt];    
